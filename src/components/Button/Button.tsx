@@ -2,7 +2,7 @@ import React from 'react';
 import s from './Button.module.css'
 
 type TButton = {
-    isError: boolean
+    isError?: boolean
     callback: () => void
     children: React.ReactNode
 }

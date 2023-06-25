@@ -1,5 +1,4 @@
 .wrapperCounter {
-    margin: 0 auto;
     padding: 30px 0;
     width: 150px;
     display: flex;
@@ -12,6 +11,7 @@
 .counter {
     width: 80px;
     height: 80px;
+    padding: 0 3px;
     margin-bottom: 20px;
     display: flex;
     justify-content: center;
@@ -27,4 +27,25 @@
 .counterError {
     background-color: black;
     color: red;
+}
+
+.input {
+    margin-bottom: 10px;
+    width: 120px;
+    padding: 3px;
+    outline: none;
+    border: none;
+    border-radius: 3px;
+    transition: all .3s ease-in-out;
+}
+
+.inputErr {
+    margin-bottom: 10px;
+    width: 120px;
+    padding:  5px;
+    color: aliceblue;
+    border: 1px solid red;;
+    border-radius: 3px;
+    background-color: brown;
+    transition: all .3s ease-in-out;
 }
