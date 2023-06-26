@@ -29,7 +29,7 @@ export const SettingCounter = (props: TSettingCounter) => {
             setStartCount(JSON.parse(startValue))
             setCount(JSON.parse(startValue))
         }
-    }, [])
+    }, [setMaxCount, setStartCount, setCount])
 
     const navigate = useNavigate()
     const getStartValue = (e: ChangeEvent<HTMLInputElement>) => {

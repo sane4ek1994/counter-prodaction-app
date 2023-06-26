@@ -33,7 +33,7 @@ export const Counter: React.FC<TCounter> = (props) => {
             setStartCount(JSON.parse(startValue))
             setCount(JSON.parse(startValue))
         }
-    }, [])
+    }, [setMaxCount, setStartCount, setCount])
     const handleClickNavigate = () => {
         navigate('/setting');
     }
