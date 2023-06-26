@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Counter} from "./components/Counter/Counter";
 import {SettingCounter} from "./components/SettingCounter/SettingCounter";
 import s from './components//Counter/Counter.module.css'
@@ -13,6 +13,18 @@ function App() {
     const [count, setCount] = useState(startCount);
     const [errorMessage, setErrorMessage] = useState('');
 
+    useEffect(() => {
+        const startValue = localStorage.getItem('startValue')
+        const maxValue = localStorage.getItem('maxValue')
+
+        if (maxValue) {
+            setMaxCount(JSON.parse(maxValue))
+        }
+        if (startValue) {
+            setStartCount(JSON.parse(startValue))
+            setCount(JSON.parse(startValue))
+        }
+    }, [setMaxCount, setStartCount, setCount])
     const incCounter = () => {
         if (count < maxCount) {
             setCount(count + 1)

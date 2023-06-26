@@ -7,32 +7,24 @@ import {useNavigate} from "react-router-dom";
 
 const error = 'Incorrect value!'
 type TSettingCounter = {
-    startCount: number
+    startCount: number | string
     maxCount: number
     setErrorMessage: (val: string) => void
-    setStartCount: (val: number) => void
+    setStartCount: (val: number ) => void
     setMaxCount: (val: number) => void
     setCount: (val: number) => void
 }
 export const SettingCounter = (props: TSettingCounter) => {
-    const {startCount, maxCount, setErrorMessage, setStartCount, setMaxCount, setCount} = props
+    const {startCount, maxCount,setStartCount, setErrorMessage, setMaxCount, setCount} = props
     const [isCorrectedValue, setIsCorrectedValue] = useState(false);
 
-    useEffect(() => {
-        const startValue = localStorage.getItem('startValue')
-        const maxValue = localStorage.getItem('maxValue')
-
-        if (maxValue) {
-            setMaxCount(JSON.parse(maxValue))
-        }
-        if (startValue) {
-            setStartCount(JSON.parse(startValue))
-            setCount(JSON.parse(startValue))
-        }
-    }, [setMaxCount, setStartCount, setCount])
-
     const navigate = useNavigate()
+
+
+
+
     const getStartValue = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log(+e.currentTarget.value)
         if (+e.currentTarget.value <= 0 || +e.currentTarget.value > maxCount) {
             setErrorMessage(error)
             setIsCorrectedValue(true)
@@ -57,7 +49,7 @@ export const SettingCounter = (props: TSettingCounter) => {
     const settingCount = () => {
         localStorage.setItem('startValue', JSON.stringify(startCount))
         localStorage.setItem('maxValue', JSON.stringify(maxCount))
-        setCount(startCount)
+        setCount(+startCount)
         navigate('/')
     }
 

@@ -19,21 +19,9 @@ type TCounter = {
 
 export const Counter: React.FC<TCounter> = (props) => {
     const {count,startCount,setCount,setStartCount,setMaxCount, maxCount, incErr,errorMessage, incCounter, resetCounter} = props
-
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const startValue = localStorage.getItem('startValue')
-        const maxValue = localStorage.getItem('maxValue')
 
-        if (maxValue) {
-            setMaxCount(JSON.parse(maxValue))
-        }
-        if (startValue) {
-            setStartCount(JSON.parse(startValue))
-            setCount(JSON.parse(startValue))
-        }
-    }, [setMaxCount, setStartCount, setCount])
     const handleClickNavigate = () => {
         navigate('/setting');
     }
