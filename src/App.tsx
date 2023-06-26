@@ -35,9 +35,15 @@ function App() {
                     <Counter count={count}
                              errorMessage={errorMessage}
                              incErr={incErr}
+                             maxCount={maxCount}
+                             startCount={startCount}
                              incCounter={incCounter}
-                             resetCounter={resetCounter} maxCount={maxCount}
-                             startCount={startCount}/>}/>
+                             resetCounter={resetCounter}
+                             setMaxCount={setMaxCount}
+                             setStartCount={setStartCount}
+                             setCount={setCount}
+
+                    />}/>
                 <Route path={'/setting'} element={
                     <SettingCounter setCount={setCount}
                                     setErrorMessage={setErrorMessage}

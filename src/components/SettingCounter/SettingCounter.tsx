@@ -5,7 +5,7 @@ import {Input} from "../Input/Input";
 import {useNavigate} from "react-router-dom";
 
 
-const error = 'incorrect value'
+const error = 'Incorrect value!'
 type TSettingCounter = {
     startCount: number
     maxCount: number
@@ -17,7 +17,7 @@ type TSettingCounter = {
 export const SettingCounter = (props: TSettingCounter) => {
     const {startCount, maxCount, setErrorMessage, setStartCount, setMaxCount, setCount} = props
     const [isCorrectedValue, setIsCorrectedValue] = useState(false);
-    const navigate = useNavigate()
+
     useEffect(() => {
         const startValue = localStorage.getItem('startValue')
         const maxValue = localStorage.getItem('maxValue')
@@ -26,27 +26,29 @@ export const SettingCounter = (props: TSettingCounter) => {
             setMaxCount(JSON.parse(maxValue))
         }
         if (startValue) {
-            setCount(JSON.parse(startValue))
             setStartCount(JSON.parse(startValue))
+            setCount(JSON.parse(startValue))
         }
     }, [])
+
+    const navigate = useNavigate()
     const getStartValue = (e: ChangeEvent<HTMLInputElement>) => {
         if (+e.currentTarget.value <= 0 || +e.currentTarget.value > maxCount) {
-            setErrorMessage('')
+            setErrorMessage(error)
             setIsCorrectedValue(true)
         } else {
-            setErrorMessage(error)
+            setErrorMessage('')
             setIsCorrectedValue(false)
         }
         setStartCount(+e.currentTarget.value)
     }
 
     const getMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
-        if (+e.currentTarget.value <= 0 || +e.currentTarget.value === startCount) {
-            setErrorMessage('')
+        if (+e.currentTarget.value < 0 || +e.currentTarget.value === startCount) {
+            setErrorMessage(error)
             setIsCorrectedValue(true)
         } else {
-            setErrorMessage(error)
+            setErrorMessage('')
             setIsCorrectedValue(false)
         }
         setMaxCount(+e.currentTarget.value)
