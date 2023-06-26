@@ -1,18 +1,14 @@
-import React from 'react';
+import React, {ComponentPropsWithoutRef} from 'react';
 import s from './Button.module.css'
 
-type TButton = {
-    isError?: boolean
-    callback: () => void
-    children: React.ReactNode
-}
-const Button = ({isError,callback, children}: TButton) => {
+type TButton = ComponentPropsWithoutRef<'button'>
+const Button = ({disabled, className,children, ...restProps}: TButton) => {
 
     const finalClassName = `
-     ${s.btn} ${isError ? s.btnError : ''}
+     ${s.btn} ${disabled ? s.btnError : ''}
     `
     return (
-        <button disabled={isError} className={finalClassName} onClick={callback}>{children}</button>
+        <button disabled={disabled} className={`${finalClassName} ${className}`} {...restProps}>{children}</button>
     );
 };
 

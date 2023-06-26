@@ -1,40 +1,53 @@
 import React, {useState} from 'react';
-import './App.css';
 import {Counter} from "./components/Counter/Counter";
 import {SettingCounter} from "./components/SettingCounter/SettingCounter";
+import {LsComponent} from "./components/LocalStorage/LSComponent";
+import s from './components//Counter/Counter.module.css'
+import {Route, Routes} from "react-router-dom";
 
 
 function App() {
 
 
-    const [startCount, setStartCount] = useState<number>(0);
-    const [maxCount, setMaxCount] = useState<number>(5);
-    const [count, setCount] = useState<number>(startCount);
-    const [resetErr, setResetErr] = useState<boolean>(true);
-    const [errorMessage, setErrorMessage] = useState(true);
+    const [startCount, setStartCount] = useState(0);
+    const [maxCount, setMaxCount] = useState(5);
+    const [count, setCount] = useState(startCount);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const incCounter = () => {
         if (count < maxCount) {
             setCount(count + 1)
-            setResetErr(false)
         }
-        return setResetErr(false)
-
+        setErrorMessage('')
     }
 
     const resetCounter = () => {
         setCount(startCount)
-        setResetErr(true)
     }
 
     const incErr = count >= maxCount
 
     return (
-    <div className="App">
-        <SettingCounter setCount={setCount} setErrorMessage={setErrorMessage}  startCount={startCount} maxCount={maxCount} setStartCount={setStartCount} setMaxCount={setMaxCount}/>
-        <Counter count={count} errorMessage={errorMessage}  incErr={incErr} resetErr={resetErr} incCounter={incCounter} resetCounter={resetCounter} />
-    </div>
-  );
+        <div className={s.wrapperCounter}>
+            {/*<LsComponent/>*/}
+            <Routes>
+                <Route path={'/'} element={
+                    <Counter count={count}
+                             errorMessage={errorMessage}
+                             incErr={incErr}
+                             incCounter={incCounter}
+                             resetCounter={resetCounter} maxCount={maxCount}
+                             startCount={startCount}/>}/>
+                <Route path={'/setting'} element={
+                    <SettingCounter setCount={setCount}
+                                    setErrorMessage={setErrorMessage}
+                                    startCount={startCount}
+                                    maxCount={maxCount} setStartCount={setStartCount}
+                                    setMaxCount={setMaxCount}/>}/>
+            </Routes>
+
+        </div>
+    );
 }
 
 export default App;

@@ -1,47 +1,62 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import s from "../Counter/Counter.module.css";
 import Button from "../Button/Button";
 import {Input} from "../Input/Input";
+import {useNavigate} from "react-router-dom";
 
 
+const error = 'incorrect value'
 type TSettingCounter = {
     startCount: number
     maxCount: number
-    setErrorMessage: (val: boolean) => void
+    setErrorMessage: (val: string) => void
     setStartCount: (val: number) => void
     setMaxCount: (val: number) => void
     setCount: (val: number) => void
 }
 export const SettingCounter = (props: TSettingCounter) => {
-    const {startCount, maxCount,setErrorMessage, setStartCount, setMaxCount, setCount} = props
-
+    const {startCount, maxCount, setErrorMessage, setStartCount, setMaxCount, setCount} = props
     const [isCorrectedValue, setIsCorrectedValue] = useState(false);
+    const navigate = useNavigate()
+    useEffect(() => {
+        const startValue = localStorage.getItem('startValue')
+        const maxValue = localStorage.getItem('maxValue')
 
-
+        if (maxValue) {
+            setMaxCount(JSON.parse(maxValue))
+        }
+        if (startValue) {
+            setCount(JSON.parse(startValue))
+            setStartCount(JSON.parse(startValue))
+        }
+    }, [])
     const getStartValue = (e: ChangeEvent<HTMLInputElement>) => {
-        if (+e.currentTarget.value < 0 || +e.currentTarget.value > maxCount) {
-            setErrorMessage(false)
+        if (+e.currentTarget.value <= 0 || +e.currentTarget.value > maxCount) {
+            setErrorMessage('')
             setIsCorrectedValue(true)
-            return
+        } else {
+            setErrorMessage(error)
+            setIsCorrectedValue(false)
         }
         setStartCount(+e.currentTarget.value)
-        setErrorMessage(true)
-        setIsCorrectedValue(false)
     }
 
     const getMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
-        if (+e.currentTarget.value <= 0 || +e.currentTarget.value  === startCount) {
-            setErrorMessage(false)
+        if (+e.currentTarget.value <= 0 || +e.currentTarget.value === startCount) {
+            setErrorMessage('')
             setIsCorrectedValue(true)
-            return
+        } else {
+            setErrorMessage(error)
+            setIsCorrectedValue(false)
         }
         setMaxCount(+e.currentTarget.value)
-        setErrorMessage(true)
-        setIsCorrectedValue(false)
     }
 
     const settingCount = () => {
+        localStorage.setItem('startValue', JSON.stringify(startCount))
+        localStorage.setItem('maxValue', JSON.stringify(maxCount))
         setCount(startCount)
+        navigate('/')
     }
 
     const finalClassName = `
@@ -50,24 +65,22 @@ export const SettingCounter = (props: TSettingCounter) => {
     `
 
     return (
-        <div>
-            <div className={s.wrapperCounter}>
-
-                <div className={s.wrapperInput}>max value:
-                    <Input className={finalClassName} type="number"
-                           value={maxCount} onChange={getMaxValue}/>
-                </div>
-
-                <div className={s.wrapperInput}>start value:
-                    <Input className={finalClassName} type="number"
-                           value={startCount}
-                           onChange={getStartValue}/>
-                </div>
-                <div className='wrapperButton'>
-                    <Button callback={settingCount}>setting</Button>
-                </div>
+        <>
+            <div className={s.wrapperInput}>max value:
+                <Input className={finalClassName} type="number"
+                       value={maxCount} onChange={getMaxValue}/>
             </div>
-        </div>
+
+            <div className={s.wrapperInput}>start value:
+                <Input className={finalClassName} type="number"
+                       value={startCount}
+                       onChange={getStartValue}/>
+            </div>
+            <div className='wrapperButton'>
+                <Button onClick={settingCount}>setting</Button>
+            </div>
+
+        </>
     );
 };
 
