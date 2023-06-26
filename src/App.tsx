@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Counter} from "./components/Counter/Counter";
 import {SettingCounter} from "./components/SettingCounter/SettingCounter";
-import {LsComponent} from "./components/LocalStorage/LSComponent";
 import s from './components//Counter/Counter.module.css'
 import {Route, Routes} from "react-router-dom";
 
