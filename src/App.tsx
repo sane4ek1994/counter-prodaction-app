@@ -1,66 +1,106 @@
-import React, {useEffect, useState} from 'react';
+import {ChangeEvent} from 'react';
 import {Counter} from "./components/Counter/Counter";
 import {SettingCounter} from "./components/SettingCounter/SettingCounter";
 import s from './components//Counter/Counter.module.css'
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
+import {
+    incCounterAC,
+    resetCounterAC, resetErrorMessageAC,
+    setErrorMessageAC,
+    setMaxCountAC,
+    setStartCountAC, isCorrectedValueAC, TState
+} from "./state/count-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {TAppRootState} from "./state/store";
 
 
 function App() {
 
+    const state = useSelector<TAppRootState, TState>((state) => state.count)
+    const dispatch = useDispatch()
 
-    const [startCount, setStartCount] = useState(0);
-    const [maxCount, setMaxCount] = useState(5);
-    const [count, setCount] = useState(startCount);
-    const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate()
 
-    useEffect(() => {
-        const startValue = localStorage.getItem('startValue')
-        const maxValue = localStorage.getItem('maxValue')
+    // подправиить работу local storage с redux
+    // useEffect(() => {
+    //     const startValue = localStorage.getItem('startValue')
+    //     const maxValue = localStorage.getItem('maxValue')
+    //
+    //     if (maxValue) {
+    //         setMaxCount(JSON.parse(maxValue))
+    //     }
+    //     if (startValue) {
+    //         setStartCount(JSON.parse(startValue))
+    //         setCount(JSON.parse(startValue))
+    //     }
+    // }, [setMaxCount, setStartCount, setCount])
 
-        if (maxValue) {
-            setMaxCount(JSON.parse(maxValue))
-        }
-        if (startValue) {
-            setStartCount(JSON.parse(startValue))
-            setCount(JSON.parse(startValue))
-        }
-    }, [setMaxCount, setStartCount, setCount])
     const incCounter = () => {
-        if (count < maxCount) {
-            setCount(count + 1)
+        if (state.count < state.max) {
+            dispatch(incCounterAC())
         }
-        setErrorMessage('')
+        dispatch(resetErrorMessageAC())
     }
 
     const resetCounter = () => {
-        setCount(startCount)
+        dispatch(resetCounterAC())
     }
 
-    const incErr = count >= maxCount
+    const settingCount = () => {
+        localStorage.setItem('startValue', JSON.stringify(state.start))
+        localStorage.setItem('maxValue', JSON.stringify(state.max))
+        dispatch(resetCounterAC())
+        navigate('/')
+    }
+
+
+    const getStartValue = (e: ChangeEvent<HTMLInputElement>) => {
+        if (+e.currentTarget.value <= 0 || +e.currentTarget.value > state.max) {
+            dispatch(setErrorMessageAC())
+            dispatch(isCorrectedValueAC(true))
+        } else {
+            dispatch(resetErrorMessageAC())
+            dispatch(isCorrectedValueAC(false))
+        }
+        dispatch(setStartCountAC(+e.currentTarget.value))
+    }
+
+    const getMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
+        if (+e.currentTarget.value < 0 || +e.currentTarget.value === state.start) {
+            dispatch(setErrorMessageAC())
+            dispatch(isCorrectedValueAC(true))
+        } else {
+            dispatch(resetErrorMessageAC())
+            dispatch(isCorrectedValueAC(false))
+        }
+        dispatch(setMaxCountAC(+e.currentTarget.value))
+    }
+
+    const incErr = state.count >= state.max
 
     return (
         <div className={s.wrapperCounter}>
             {/*<LsComponent/>*/}
             <Routes>
                 <Route path={'/'} element={
-                    <Counter count={count}
-                             errorMessage={errorMessage}
+                    <Counter count={state.count}
+                             errorMessage={state.error}
                              incErr={incErr}
-                             maxCount={maxCount}
-                             startCount={startCount}
+                             maxCount={state.max}
+                             startCount={state.start}
                              incCounter={incCounter}
                              resetCounter={resetCounter}
-                             setMaxCount={setMaxCount}
-                             setStartCount={setStartCount}
-                             setCount={setCount}
 
                     />}/>
                 <Route path={'/setting'} element={
-                    <SettingCounter setCount={setCount}
-                                    setErrorMessage={setErrorMessage}
-                                    startCount={startCount}
-                                    maxCount={maxCount} setStartCount={setStartCount}
-                                    setMaxCount={setMaxCount}/>}/>
+                    <SettingCounter
+                        startCount={state.start}
+                        maxCount={state.max}
+                        isCorrectedValue={state.isCorrectedValue}
+                        settingCount={settingCount}
+                        getStartValue={getStartValue}
+                        getMaxValue={getMaxValue}
+                    />}/>
             </Routes>
 
         </div>
