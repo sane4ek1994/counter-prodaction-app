@@ -14,10 +14,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {TAppRootState} from "./state/store";
 
 
-function AppWitchReducers() {
+function App() {
 
-    // const [state, dispatchCounter] = useReducer(countReducer,
-    //     {start: 0, count: 0, max: 5, error: '', isCorrectedValue: false});
     const state = useSelector<TAppRootState, TState>((state) => state.count)
     const dispatch = useDispatch()
 
@@ -109,4 +107,4 @@ function AppWitchReducers() {
     );
 }
 
-export default AppWitchReducers;
+export default App;

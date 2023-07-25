@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
-import AppWitchReducers from "./AppWitchReducers";
+import App from "./App";
 import {Provider} from "react-redux";
 import {store} from "./state/store";
 
@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(
 root.render(
     <BrowserRouter>
         <Provider store={store}>
-            <AppWitchReducers/>
+            <App/>
         </Provider>
 
     </BrowserRouter>);
