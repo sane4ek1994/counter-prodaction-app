@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
 import Button from "../Button/Button";
 import s from './Counter.module.css'
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 type TCounter = {
     startCount: number
@@ -11,14 +10,11 @@ type TCounter = {
     errorMessage: string
     incCounter: () => void
     resetCounter: () => void
-    setMaxCount: (val: number) => void
-    setStartCount: (val: number) => void
-    setCount: (val: number) => void
 
 }
 
 export const Counter: React.FC<TCounter> = (props) => {
-    const {count,startCount,setCount,setStartCount,setMaxCount, maxCount, incErr,errorMessage, incCounter, resetCounter} = props
+    const {count, startCount, maxCount, incErr, errorMessage, incCounter, resetCounter} = props
     const navigate = useNavigate();
 
 
@@ -31,11 +27,11 @@ export const Counter: React.FC<TCounter> = (props) => {
         ${incErr ? s.counterError : ''}
     `
     return (
-        <div >
-            <div className={finalClassName}>{errorMessage ?  errorMessage : count}</div>
+        <div>
+            <div className={finalClassName}>{errorMessage ? errorMessage : count}</div>
             <div className={s.wrapperButton}>
                 <Button disabled={count >= maxCount} onClick={incCounter}>inc</Button>
-                <Button disabled={errorMessage !=='' || count === startCount} onClick={resetCounter}>reset</Button>
+                <Button disabled={errorMessage !== '' || count === startCount} onClick={resetCounter}>reset</Button>
                 <Button onClick={handleClickNavigate}>setting</Button>
             </div>
         </div>
