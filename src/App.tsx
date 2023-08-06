@@ -33,7 +33,7 @@ function App() {
             dispatch(setStartCountAC(JSON.parse(startValue)))
             dispatch(setCountAC(JSON.parse(startValue)))
         }
-    }, [])
+    }, [dispatch])
 
     const incCounter = () => {
         if (state.count < state.max) {
