@@ -1,4 +1,4 @@
-import {ChangeEvent} from 'react';
+import {ChangeEvent, useEffect} from 'react';
 import {Counter} from "./components/Counter/Counter";
 import {SettingCounter} from "./components/SettingCounter/SettingCounter";
 import s from './components//Counter/Counter.module.css'
@@ -8,7 +8,7 @@ import {
     resetCounterAC, resetErrorMessageAC,
     setErrorMessageAC,
     setMaxCountAC,
-    setStartCountAC, isCorrectedValueAC, TState
+    setStartCountAC, isCorrectedValueAC, TState, setCountAC
 } from "./state/count-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {TAppRootState} from "./state/store";
@@ -22,18 +22,18 @@ function App() {
     const navigate = useNavigate()
 
     // подправиить работу local storage с redux
-    // useEffect(() => {
-    //     const startValue = localStorage.getItem('startValue')
-    //     const maxValue = localStorage.getItem('maxValue')
-    //
-    //     if (maxValue) {
-    //         setMaxCount(JSON.parse(maxValue))
-    //     }
-    //     if (startValue) {
-    //         setStartCount(JSON.parse(startValue))
-    //         setCount(JSON.parse(startValue))
-    //     }
-    // }, [setMaxCount, setStartCount, setCount])
+    useEffect(() => {
+        const startValue = localStorage.getItem('startValue')
+        const maxValue = localStorage.getItem('maxValue')
+
+        if (maxValue) {
+            dispatch(setMaxCountAC(JSON.parse(maxValue)))
+        }
+        if (startValue) {
+            dispatch(setStartCountAC(JSON.parse(startValue)))
+            dispatch(setCountAC(JSON.parse(startValue)))
+        }
+    }, [dispatch])
 
     const incCounter = () => {
         if (state.count < state.max) {

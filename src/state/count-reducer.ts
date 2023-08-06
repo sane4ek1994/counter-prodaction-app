@@ -5,6 +5,7 @@ type TResetErrorMessage = ReturnType<typeof resetErrorMessageAC>
 type TSetMaxCount = ReturnType<typeof setMaxCountAC>
 type TSetStartCount = ReturnType<typeof setStartCountAC>
 type TToggleIsCorrectedValue = ReturnType<typeof isCorrectedValueAC>
+type TSetCount = ReturnType<typeof setCountAC>
 
 
 export type TActions =
@@ -15,6 +16,7 @@ export type TActions =
     | TSetMaxCount
     | TSetStartCount
     | TToggleIsCorrectedValue
+    | TSetCount
 
 const INC_COUNTER = 'INC-COUNTER'
 const RESET_COUNTER = 'RESET-COUNTER'
@@ -23,6 +25,7 @@ const SET_MAX_COUNT = 'SET-MAX-COUNT'
 const IS_CORRECTED_VALUE = 'IS-CORRECTED-VALUE'
 const SET_ERROR_MESSAGE = 'SET-ERROR-MESSAGE'
 const RESET_ERROR_MESSAGE = 'RESET-ERROR-MESSAGE'
+const SET_COUNTER = 'SET-COUNTER'
 
 export type TState = {
     max: number,
@@ -38,6 +41,8 @@ export const countReducer = (state: TState = initialState, action: TActions): TS
     switch (action.type) {
         case INC_COUNTER:
             return {...state, count: state.count + 1}
+        case SET_COUNTER:
+            return {...state, count: action.count}
         case SET_START_COUNT:
             return {...state, start: action.startCount}
         case SET_MAX_COUNT:
@@ -50,12 +55,12 @@ export const countReducer = (state: TState = initialState, action: TActions): TS
             return {...state, error: 'Incorrect Value'}
         case RESET_ERROR_MESSAGE:
             return {...state, error: ''}
-
         default:
             return state
     }
 }
 export const incCounterAC = () => ({type: INC_COUNTER} as const)
+export const setCountAC = (count: number) => ({type: SET_COUNTER, count} as const)
 export const resetCounterAC = () => ({type: RESET_COUNTER} as const)
 export const setStartCountAC = (startCount: number) => ({type: SET_START_COUNT, startCount} as const)
 export const setMaxCountAC = (maxCount: number) => ({type: SET_MAX_COUNT, maxCount} as const)
